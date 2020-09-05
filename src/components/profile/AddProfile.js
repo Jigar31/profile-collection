@@ -1,7 +1,61 @@
 import React, { useState } from "react";
-import "./AddProfile.css";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Toolbar from "@material-ui/core/Toolbar";
+import AppBar from "@material-ui/core/AppBar";
+import TextField from "@material-ui/core/TextField";
+import { NavLink } from "react-router-dom";
+
+const useStyles = makeStyles((theme) => ({
+  submit__button: {
+    color: "white",
+    backgroundColor: "blue",
+    "&:hover": {
+      backgroundColor: "blue",
+    },
+  },
+  navLink: {
+    color: "white",
+    textDecoration: "none",
+    margin: "10px",
+  },
+  "add-profile-container": {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    "& > *": {
+      color: "blue",
+    },
+  },
+  "add-profile__form": {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  "add-profile__form-field": {
+    marginBottom: "20px",
+  },
+  upload__button: {
+    backgroundColor: "blue",
+    color: "white",
+    marginBottom: "10px",
+    "&:hover": {
+      backgroundColor: "blue",
+    },
+  },
+  "add-profile__form__profile-picture": {
+    display: "flex",
+  },
+  "profile-picture": {
+    borderRadius: "50%",
+  },
+}));
 
 function AddProfile() {
+  const classes = useStyles();
+
   let [username, setUsername] = useState("");
   let [firstname, setFirstname] = useState("");
   let [lastname, setLastname] = useState("");
@@ -15,111 +69,96 @@ function AddProfile() {
   };
 
   return (
-    <div className="add-profile-container">
+    <div className={classes["add-profile-container"]}>
+      <AppBar position="static">
+        <Toolbar>
+          <NavLink className={classes.navLink} exact to="/">
+            Home
+          </NavLink>
+          <NavLink className={classes.navLink} exact to="/add-profile">
+            Add Profile
+          </NavLink>
+        </Toolbar>
+      </AppBar>
       <h2>Add Profile</h2>
-      <form className="add-profile__form" onSubmit={(e) => e.preventDefault()}>
-        <div className="add-profile__form__input">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            defaultValue=""
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div className="add-profile__form__input">
-          <label htmlFor="firstname">Firstname</label>
-          <input
-            type="text"
-            id="firstname"
-            name="firstname"
-            defaultValue=""
-            onChange={(e) => setFirstname(e.target.value)}
-          />
-        </div>
-        <div className="add-profile__form__input">
-          <label htmlFor="lastname">Lastname</label>
-          <input
-            type="text"
-            id="lastname"
-            name="lastname"
-            defaultValue=""
-            onChange={(e) => setLastname(e.target.value)}
-          />
-        </div>
-        <div className="add-profile__form__input">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            defaultValue=""
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="add-profile__form__input">
-          <label htmlFor="profile">Profile Picture</label>
+      <form
+        className={classes["add-profile__form"]}
+        onSubmit={(e) => e.preventDefault()}
+      >
+        <TextField
+          id="username"
+          className={classes["add-profile__form-field"]}
+          label="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <TextField
+          id="firstname"
+          className={classes["add-profile__form-field"]}
+          label="Firstname"
+          value={firstname}
+          onChange={(e) => setFirstname(e.target.value)}
+        />
+        <TextField
+          id="lastname"
+          className={classes["add-profile__form-field"]}
+          label="Lastname"
+          value={lastname}
+          onChange={(e) => setLastname(e.target.value)}
+        />
+        <TextField
+          id="email"
+          className={classes["add-profile__form-field"]}
+          label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          id="bio"
+          className={classes["add-profile__form-field"]}
+          label="Bio"
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
+        />
+        <img
+          src={profilePicture}
+          alt="profile"
+          className={classes["profile-picture"]}
+          width="30%"
+          height="30%"
+        />
+        <span className="add-profile__form__profile-picture">
           <input
             type="file"
             id="profile"
-            name="profile"
-            defaultValue=""
+            style={{ display: "none" }}
             onChange={(e) => {
-              if (e.target.files[0]) {
-                setFilename(e.target.files[0].name);
-                let reader = new FileReader();
-
-                reader.onloadend = () => {
-                  setProfilePicture(reader.result);
-                };
-
-                reader.readAsDataURL(e.target.files[0]);
-              } else {
-                setProfilePicture(null);
-              }
+              setFilename(e.target.files[0].name);
+              let reader = new FileReader();
+              reader.onloadend = (e) => {
+                setProfilePicture(reader.result);
+              };
+              reader.readAsDataURL(e.target.files[0]);
             }}
           />
-        </div>
-        <div className="add-profile__form__input">
-          <label htmlFor="bio">Bio</label>
-          <input
-            type="text"
-            id="bio"
-            name="bio"
-            defaultValue=""
-            onChange={(e) => setBio(e.target.value)}
-          />
-        </div>
-        <div className="add-profile__form__button">
-          <button type="submit" onClick={() => showFormFields()}>
-            Submit
-          </button>
-        </div>
+          <label htmlFor="profile">
+            <Button
+              variant="contained"
+              className={classes["upload__button"]}
+              component="span"
+            >
+              Upload Profile Picture
+            </Button>
+          </label>
+        </span>
+        <Button
+          variant="contained"
+          className={classes["submit__button"]}
+          onClick={() => showFormFields()}
+        >
+          Submit
+        </Button>
       </form>
-      <div className="add-profile__form-fields">
-        <h3>Preview</h3>
-        Username: {username}
-        <br />
-        Firstname: {firstname}
-        <br />
-        Lastname: {lastname}
-        <br />
-        Email: {email}
-        <br />
-        Profile Picture:{" "}
-        {profilePicture && (
-          <img
-            className="profile-picture"
-            src={profilePicture}
-            alt="profile"
-            width="50"
-            height="50"
-          />
-        )}
-        <br />
-        Bio: {bio}
-      </div>
     </div>
   );
 }
