@@ -1,0 +1,13 @@
+.header {
+    display:flex;
+    height: 55px;
+    background-color: blue;
+    box-shadow: 0px 2px 10px 0.1px blue;
+    margin-bottom: 50px;
+}
+
+.header__nav-link {
+    margin: 20px;
+    color: white;
+    text-decoration: none;
+}
